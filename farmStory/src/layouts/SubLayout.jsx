@@ -1,5 +1,6 @@
 import React from "react";
 import { Aside } from "../components/common/Aside";
+import { useLocation, useSearchParams } from "react-router-dom";
 import useCates from "../hooks/useCates";
 
 import labels from "../data/labels.json";
