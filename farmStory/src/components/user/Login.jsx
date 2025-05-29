@@ -1,21 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { postUserLogin } from "../../api/userAPI";
-import { useDispatch } from "react-redux";
-import { login } from "../../slices/loginSlice";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../contexts/AuthContext";
+import useAuth from "../../hooks/useAuth";
 
 const initState = {
-  uid: '',
-  pass: '',
+  uid: "",
+  pass: "",
 };
 
 export const Login = () => {
   const [user, setUser] = useState({ ...initState });
 
-  const navigate = useNavigate();
+  const { login } = useAuth();
 
-  // redux store dispatch
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // 핸들러
   const changeHandler = (e) => {
@@ -33,19 +32,22 @@ export const Login = () => {
         const data = await postUserLogin(user);
         console.log(data);
 
-        if(data.username) {
+        if (data.username) {
           // redux login 호출
-          dispatch(login(data));
+          //dispatch(login(data));
+
+          // context login 호출
+          login(data.username);
 
           // 메인 이동(컴포넌트 라우팅)
           navigate("/");
         }
-
       } catch (err) {
         console.error(err);
       }
     };
 
+    // 호출
     fetchData();
   };
 
@@ -58,7 +60,13 @@ export const Login = () => {
               <img src="/images/login_ico_id.png" alt="아이디" />
             </td>
             <td>
-              <input type="text" name="uid" value={user.uid} onChange={changeHandler} placeholder="아이디 입력" />
+              <input
+                type="text"
+                name="uid"
+                value={user.uid}
+                onChange={changeHandler}
+                placeholder="아이디 입력"
+              />
             </td>
           </tr>
           <tr>
@@ -66,7 +74,13 @@ export const Login = () => {
               <img src="/images/login_ico_pw.png" alt="비밀번호" />
             </td>
             <td>
-              <input type="password" name="pass" value={user.pass} onChange={changeHandler} placeholder="비밀번호 입력" />
+              <input
+                type="password"
+                name="pass"
+                value={user.pass}
+                onChange={changeHandler}
+                placeholder="비밀번호 입력"
+              />
             </td>
           </tr>
         </table>

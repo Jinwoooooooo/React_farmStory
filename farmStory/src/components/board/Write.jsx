@@ -1,11 +1,60 @@
-import React from "react";
+import React, { use, useState } from "react";
+import useAuth from "../../hooks/useAuth";
+import { Navigate, useNavigate } from "react-router-dom";
+import useCates from "../../hooks/useCates";
+import { postArticle } from "../../api/articleAPI";
 
 const Write = () => {
+  const navigate = useNavigate();
+  const [cate1, cate2] = useCates();
+  const { username } = useAuth();
+
+  const [article, setArticle] = useState({
+    cate: cate2,
+    title: "",
+    content: "",
+    writer: username,
+  });
+
+  // 로그인을 안하면 로그인 이동
+  if (!username) {
+    alert("로그인을 해야 합니다.");
+    return <Navigate to="/user/login" />;
+  }
+
+  // 핸들러
+  const changeHandler = (e) => {
+    e.preventDefault();
+    setArticle({ ...article, [e.target.name]: e.target.value });
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log(article);
+
+    // 서버 요청 정의
+    const fetchData = async () => {
+      try {
+        // 글 등록 요청
+        const data = await postArticle(article);
+        console.log(data);
+
+        // 글 목록 이동
+        navigate(`/board/list?cate1=${cate1}&cate2=${cate2}`);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    // 호출
+    fetchData();
+  };
+
   return (
     <div id="board">
       <section class="write">
         <h1>글쓰기</h1>
-        <form action="#">
+        <form onSubmit={submitHandler}>
           <table border="0">
             <tr>
               <th>제목</th>
@@ -13,6 +62,8 @@ const Write = () => {
                 <input
                   type="text"
                   name="title"
+                  value={article.title}
+                  onChange={changeHandler}
                   placeholder="제목을 입력하세요."
                 />
               </td>
@@ -20,7 +71,11 @@ const Write = () => {
             <tr>
               <th>내용</th>
               <td>
-                <textarea name="content"></textarea>
+                <textarea
+                  name="content"
+                  value={article.content}
+                  onChange={changeHandler}
+                ></textarea>
               </td>
             </tr>
             <tr>

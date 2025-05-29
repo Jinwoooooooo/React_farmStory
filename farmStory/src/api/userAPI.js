@@ -1,5 +1,5 @@
 import axios from "axios";
-import { USER_LOGIN, USER_LOGOUT, USER_REGISTER, USER_TERMS } from "./http";
+import { USER_LOGIN, USER_LOGOUT, USER_REGISTER, USER_TERMS } from "./_http";
 
 export const getTerms = async () => {
   try {
@@ -33,7 +33,7 @@ export const postUserLogin = async (data) => {
   }
 };
 
-export const getUserLogout = async (data) => {
+export const getUserLogout = async () => {
   try {
     const response = await axios.get(`${USER_LOGOUT}`, {
       withCredentials: true,

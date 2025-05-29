@@ -1,36 +1,29 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../../slices/loginSlice";
 import { getUserLogout } from "../../api/userAPI";
+import useAuth from "../../hooks/useAuth";
 
 export const Header = () => {
   const navigate = useNavigate();
-
-  // redux dispatch
-  const dispatch = useDispatch();
-
-  // redux store
-  const loginSlice = useSelector((state) => state.loginSlice);
+  const { username, logout } = useAuth();
 
   // 로그아웃
   const logoutHandler = () => {
     // 로그아웃 서버 요청
     const fetchData = async () => {
       try {
-        // 로그인
         const data = await getUserLogout();
-        console.log(data);    
+        console.log(data);
       } catch (err) {
         console.error(err);
       }
     };
-    
+
     // 호출
     fetchData();
 
     // 로그아웃 처리
-    dispatch(logout());
+    logout();
 
     // 로그인 이동
     navigate("/user/login");
@@ -44,7 +37,8 @@ export const Header = () => {
         </Link>
         <p>
           <Link to="/">HOME |</Link>
-          { !loginSlice.username ? (
+
+          {!username ? (
             <>
               <Link to="/user/login">로그인 |</Link>
               <Link to="/user/terms">회원가입 |</Link>
@@ -55,7 +49,8 @@ export const Header = () => {
               <Link onClick={logoutHandler}>로그아웃 |</Link>
               <a href="./admin/">관리자 |</a>
             </>
-          ) }
+          )}
+
           <a href="./community/qna.html">고객센터</a>
         </p>
         <img src="/images/head_txt_img.png" alt="3만원 이상 무료배송" />
