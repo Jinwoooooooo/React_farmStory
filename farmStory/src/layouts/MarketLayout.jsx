@@ -4,7 +4,7 @@ import useCates from "../hooks/useCates";
 
 import labels from "../data/labels.json";
 
-export const SubLayout = ({ children }) => {
+export const MarketLayout = ({ children }) => {
   const [cate1, cate2] = useCates();
 
   return (
@@ -14,7 +14,7 @@ export const SubLayout = ({ children }) => {
       </div>
       <section className={`${cate1}`}>
         <Aside />
-        <article>
+        <article className="list">
           <nav>
             <img
               src={`/images/sub_nav_tit_${cate1}_${cate2}.png`}

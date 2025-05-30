@@ -1,13 +1,14 @@
 import React from "react";
-import { SubLayout } from "../../layouts/SubLayout";
+import { MarketLayout } from "../../layouts/MarketLayout";
 import { MainLayout } from "../../layouts/MainLayout";
+import List from "../../components/market/List";
 
 export const ListPage = () => {
   return (
     <MainLayout>
-      <SubLayout>
-        <h3>장보기 목록</h3>
-      </SubLayout>
+      <MarketLayout>
+        <List />
+      </MarketLayout>
     </MainLayout>
   );
 };
